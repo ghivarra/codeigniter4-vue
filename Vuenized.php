@@ -74,7 +74,9 @@ class Vuenized
 
                     } elseif ($fileExtension === '.css') {
 
-                        if ($asset->src === 'src/main.css')
+                        $fileName = strrchr($asset->src, '/');
+
+                        if ($fileName === 'main.css')
                         {
                             $assetUrl = base_url("{$_ENV['VITE_BUILD_DIR']}/{$asset->file}");
                             array_push($assets['css'], "<link rel=\"stylesheet\" href=\"{$assetUrl}\">");
