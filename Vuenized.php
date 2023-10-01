@@ -15,7 +15,7 @@
 
 class Vuenized
 {
-    public static function getAssets(): array
+    public function getAssets(): array
     {
         $assets = [
             'js'  => [],
@@ -95,9 +95,9 @@ class Vuenized
 
     //========================================================================================
 
-    public static function render(string $view, string $noscriptMessage = 'You need to enable javascript in your browser to access this page'): string
+    public function render(string $view, string $noscriptMessage = 'You need to enable javascript in your browser to access this page'): string
     {
-        $assets = self::getAssets();
+        $assets = $this->getAssets();
         $styles = '';
 
         // inject css into head
@@ -117,6 +117,9 @@ class Vuenized
         endforeach;
 
         $view = str_replace('</body>', $scripts . '</body>', $view);
+
+        // inject noscript
+        $view = str_replace('</body>', "<noscript>{$noscriptMessage}</noscript>", $view);
 
         // return
         return $view;
