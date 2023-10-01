@@ -57,7 +57,7 @@ class Vuenized
 
             if (is_file($manifestPath))
             {
-                $manifest = json_encode(file_get_contents($manifestPath));
+                $manifest = json_decode(file_get_contents($manifestPath));
 
                 foreach ($manifest as $asset):
 
