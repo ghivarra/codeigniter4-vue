@@ -46,14 +46,7 @@ class Vuenized
 
         } elseif ($_ENV['VITE_ENVIRONMENT'] === 'production' || $_ENV['VITE_ENVIRONMENT'] === 'testing') {
             
-            $oldManifestPath = FCPATH . "manifest.json";
-            $manifestPath    = ROOTPATH . "manifest.json";
-            
-            if (is_file($oldManifestPath))
-            {
-                // move manifest file for security purposes
-                rename($oldManifestPath, $manifestPath);
-            }
+            $manifestPath = ROOTPATH . "manifest.json";
 
             if (is_file($manifestPath))
             {
