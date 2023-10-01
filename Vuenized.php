@@ -46,7 +46,7 @@ class Vuenized
 
         } elseif ($_ENV['VITE_ENVIRONMENT'] === 'production' || $_ENV['VITE_ENVIRONMENT'] === 'testing') {
             
-            $oldManifestPath = FCPATH . "{$_ENV['VITE_BUILD_DIR']}/manifest.json";
+            $oldManifestPath = FCPATH . "manifest.json";
             $manifestPath    = ROOTPATH . "manifest.json";
             
             if (is_file($oldManifestPath))
@@ -66,9 +66,9 @@ class Vuenized
 
                     if ($fileExtension === '.js')
                     {
-                        if ($asset->isEntry)
+                        if (isset($asset->isEntry) && $asset->isEntry === true)
                         {
-                            $assetUrl = base_url("{$_ENV['VITE_BUILD_DIR']}/{$asset->file}");
+                            $assetUrl = base_url($asset->file);
                             array_push($assets['js'], "<script type=\"module\" crossorigin src=\"{$assetUrl}\"></script>");
                         }
 
@@ -76,9 +76,9 @@ class Vuenized
 
                         $fileName = strrchr($asset->src, '/');
 
-                        if ($fileName === 'main.css')
+                        if ($fileName === '/main.css')
                         {
-                            $assetUrl = base_url("{$_ENV['VITE_BUILD_DIR']}/{$asset->file}");
+                            $assetUrl = base_url($asset->file);
                             array_push($assets['css'], "<link rel=\"stylesheet\" href=\"{$assetUrl}\">");
                         }
                     }
