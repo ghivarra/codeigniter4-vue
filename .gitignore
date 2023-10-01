@@ -1,1 +1,9 @@
+# Visual Studio Code
+.vscode/
 
+/results/
+/phpunit*.xml
+/.phpunit.*.cache
+
+# Git
+.git/*
