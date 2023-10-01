@@ -45,8 +45,15 @@ class Vuenized
             array_push($assets['js'], "<script type=\"module\" crossorigin src=\"{$mainJSUrl}\"></script>");
 
         } elseif ($_ENV['VITE_ENVIRONMENT'] === 'production' || $_ENV['VITE_ENVIRONMENT'] === 'testing') {
-
-            $manifestPath = FCPATH . "{$_ENV['VITE_BUILD_DIR']}/manifest.json";
+            
+            $oldManifestPath = FCPATH . "{$_ENV['VITE_BUILD_DIR']}/manifest.json";
+            $manifestPath    = ROOTPATH . "manifest.json";
+            
+            if (is_file($oldManifestPath))
+            {
+                // move manifest file for security purposes
+                rename($oldManifestPath, $manifestPath);
+            }
 
             if (is_file($manifestPath))
             {
