@@ -97,29 +97,30 @@ class Vuenized
 
     public function render(string $view, string $noscriptMessage = 'You need to enable javascript in your browser to access this page'): string
     {
-        $assets = $this->getAssets();
-        $styles = '';
+        $assets  = $this->getAssets();
+        $styles  = "\t";
+        $scripts = "\t";
 
         // inject css into head
-        foreach ($assets['css'] as $styles):
+        foreach ($assets['css'] as $style):
 
-            $styles .= $styles . "\n";
+            $styles .= $style . "\n";
 
         endforeach;
 
         $view = str_replace('</head>', $styles . '</head>', $view);
 
         // inject js into after body
-        foreach ($assets['js'] as $scripts):
+        foreach ($assets['js'] as $script):
 
-            $scripts .= $scripts . "\n";
+            $scripts .= $script . "\n";
 
         endforeach;
 
         $view = str_replace('</body>', $scripts . '</body>', $view);
 
         // inject noscript
-        $view = str_replace('</body>', "<noscript>{$noscriptMessage}</noscript>", $view);
+        $view = str_replace('</body>', "\t<noscript>{$noscriptMessage}</noscript>\n</body>", $view);
 
         // return
         return $view;
