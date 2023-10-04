@@ -22,7 +22,7 @@ class Vuenized
             'css' => []
         ];
 
-        if ($_ENV['VITE_ENVIRONMENT'] === 'development')
+        if ($_ENV['NODE_ENV'] === 'development')
         {
             // build main js url
             $mainJSUrl = "{$_ENV['VITE_ORIGIN']}/{$_ENV['VITE_RESOURCES_DIR']}/main.js";
@@ -44,7 +44,7 @@ class Vuenized
             // push main js url
             array_push($assets['js'], "<script type=\"module\" crossorigin src=\"{$mainJSUrl}\"></script>");
 
-        } elseif ($_ENV['VITE_ENVIRONMENT'] === 'production' || $_ENV['VITE_ENVIRONMENT'] === 'testing') {
+        } elseif ($_ENV['NODE_ENV'] === 'production' || $_ENV['NODE_ENV'] === 'testing') {
             
             $manifestPath = ROOTPATH . "manifest.json";
 
