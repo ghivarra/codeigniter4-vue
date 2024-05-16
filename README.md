@@ -3,7 +3,7 @@ Library to auto-injecting Vue JS to CodeIgniter 4 application
 
 ## How to use
 1. Install Vue JS 3 using [this steps](https://vuejs.org/guide/quick-start.html) **outside** your root CodeIgniter 4 installation as a separate project folder
-2. Copy all files inside Vue JS installation folder except **README.md** and **public** folder as it will be conflicted with CodeIgniter 4 files and folders
+2. Copy all files inside Vue JS installation folder except **README.md**, **.gitignore** and **public folder** as it will be conflicted with CodeIgniter 4 files and folders
 3. Add new environment variable to your **.env** file, you can see it on [_.env.example_](https://github.com/ghivarra/codeigniter4-vue/blob/main/.env.example) on this repository
 4. Replace file _src/main.js_ with [**main.js**](https://github.com/ghivarra/codeigniter4-vue/blob/main/main.js) file from this repository
 5. Replace file _vite.config.js_ with [**vite.config.js**](https://github.com/ghivarra/codeigniter4-vue/blob/main/vite.config.js) file from this repository
