@@ -1,4 +1,6 @@
-<?php namespace App\Libraries\Ghivarra\Vuenized;
+<?php 
+
+namespace App\Libraries\Ghivarra;
 
 /**
  * Vuenized Library
@@ -15,6 +17,19 @@
 
 class Vuenized
 {
+    protected $viewPath;
+    protected $viewData = [];
+    protected $rootView = 'DefaultView';
+
+    //========================================================================================
+
+    public function setRootView(string $rootViewPath): void
+    {
+        $this->rootView = $rootViewPath;
+    }
+
+    //========================================================================================
+    
     public function getAssets(): array
     {
         $assets = [
@@ -22,7 +37,7 @@ class Vuenized
             'css' => []
         ];
 
-        if ($_ENV['NODE_ENV'] === 'development')
+        if ($_ENV['VITE_APP_ENV'] === 'development')
         {
             // build main js url
             $mainJSUrl = "{$_ENV['VITE_ORIGIN']}/{$_ENV['VITE_RESOURCES_DIR']}/main.js";
@@ -42,11 +57,11 @@ class Vuenized
             }
 
             // push main js url
-            array_push($assets['js'], "<script type=\"module\" crossorigin src=\"{$mainJSUrl}\"></script>");
+            array_push($assets['js'], "<script type=\"module\" crossorigin src=\"{$mainJSUrl}\" defer></script>");
 
-        } elseif ($_ENV['NODE_ENV'] === 'production' || $_ENV['NODE_ENV'] === 'testing') {
+        } elseif ($_ENV['VITE_APP_ENV'] === 'production' || $_ENV['VITE_APP_ENV'] === 'testing') {
             
-            $manifestPath = ROOTPATH . "manifest.json";
+            $manifestPath = FCPATH . ".vite/manifest.json";
 
             if (is_file($manifestPath))
             {
@@ -59,20 +74,21 @@ class Vuenized
 
                     if ($fileExtension === '.js')
                     {
-                        if (isset($asset->isEntry) && $asset->isEntry === true)
+                        if (isset($asset->isEntry) && $asset->isEntry)
                         {
-                            $assetUrl = base_url($asset->file);
-                            array_push($assets['js'], "<script type=\"module\" crossorigin src=\"{$assetUrl}\"></script>");
-                        }
+                            $mainJS = base_url($asset->file);
 
-                    } elseif ($fileExtension === '.css') {
+                            array_push($assets['js'], "<script type=\"module\" src=\"{$mainJS}\" crossorigin defer></script>");
 
-                        $fileName = strrchr($asset->src, '/');
+                            if (isset($asset->css) && !empty($asset->css))
+                            {
+                                foreach ($asset->css as $css):
 
-                        if ($fileName === '/main.css')
-                        {
-                            $assetUrl = base_url($asset->file);
-                            array_push($assets['css'], "<link rel=\"stylesheet\" href=\"{$assetUrl}\">");
+                                    $css = base_url($css);
+                                    array_push($assets['css'], "<link href=\"{$css}\" rel=\"stylesheet\">");
+
+                                endforeach;
+                            }
                         }
                     }
 
@@ -90,11 +106,33 @@ class Vuenized
 
     //========================================================================================
 
-    public function render(string $view, string $noscriptMessage = 'You need to enable javascript in your browser to access this page'): string
+    public function getPageData(): string
     {
+        return json_encode([
+            'view' => $this->viewPath,
+            'data' => $this->viewData
+        ]);
+    }
+
+    //========================================================================================
+
+    public function render(string $viewPath, array $data = [], string $noscriptMessage = 'You need to enable javascript in your browser to access this page'): string
+    {
+        // set view data
+        if (!empty($data))
+        {
+            $this->viewData = $data;
+        }
+
+        $this->viewPath = $viewPath;
+        $view = view($this->rootView, [
+            'app'  => $this,
+            'data' => $data
+        ]);
+
         $assets  = $this->getAssets();
         $styles  = "\t";
-        $scripts = "\t";
+        $scripts = "";
 
         // inject css into head
         foreach ($assets['css'] as $style):
@@ -105,17 +143,17 @@ class Vuenized
 
         $view = str_replace('</head>', $styles . '</head>', $view);
 
-        // inject js into after body
+        // inject js into just before head
         foreach ($assets['js'] as $script):
 
             $scripts .= $script . "\n";
 
         endforeach;
 
-        $view = str_replace('</body>', $scripts . '</body>', $view);
+        $view = str_replace('</head>', $scripts . '</head>', $view);
 
         // inject noscript
-        $view = str_replace('</body>', "\t<noscript>{$noscriptMessage}</noscript>\n</body>", $view);
+        $view = str_replace('<body>', "<body>\n\t<noscript>{$noscriptMessage}</noscript>", $view);
 
         // return
         return $view;
