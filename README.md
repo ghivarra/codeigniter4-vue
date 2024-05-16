@@ -29,7 +29,7 @@ class YourController extends BaseController
 }
 ```
 9. Run __npm run dev__ from your console to run vite development server of Vue JS 3
-10. If you wanted to build 
+10. If you wanted to build you can just run **npm run build** and the library will inject the built Vue JS 3 assets into your root view
 
 ## Set Default Root View
 By default we use _'app/views/DefaultView.php'_ as a root view. However, you can set it using **setRootView()** function. Here is the basic example if you wanted to change your default root view to _'app/views/MyView/VueApp.php'_ :
