@@ -24,7 +24,7 @@ class YourController extends BaseController
     $vuenized = new Vuenized();
 
     // inject vue to CI App
-    return $vuenized->render('src/YourVueComponent.vue');
+    return $vuenized->render('App.vue');
   }
 }
 ```
