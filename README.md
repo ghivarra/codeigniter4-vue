@@ -44,7 +44,7 @@ class YourController extends BaseController
     $vuenized = new Vuenized();
 
     // set your root view here
-    $vuenized->setRootView('MyView/VueApp')
+    $vuenized->setRootView('MyView/VueApp');
 
     // inject vue to CI App
     return $vuenized->render('App.vue');
