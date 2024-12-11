@@ -3,7 +3,7 @@
 namespace App\Libraries\Ghivarra;
 
 /**
- * Vuenized Library
+ * VueIgniter Library
  *
  * Created with love and proud by Ghivarra Senandika Rushdie
  *
@@ -15,7 +15,7 @@ namespace App\Libraries\Ghivarra;
  *
 **/
 
-class Vuenized
+class VueIgniter
 {
     protected $viewPath;
     protected $viewData = [];
@@ -40,7 +40,7 @@ class Vuenized
         if ($_ENV['VITE_APP_ENV'] === 'development')
         {
             // build main js url
-            $mainJSUrl = "{$_ENV['VITE_ORIGIN']}/src/main.js";
+            $mainJSUrl = "{$_ENV['VITE_ORIGIN']}/{$_ENV['VITE_RESOURCES_DIR']}/main.js";
 
             // we didn't used ssl verifications so we can use self signed ssl in localhost environment such as laragon etc.
             // make sure you only develop your app in localhost so MITM attack is not an issue
