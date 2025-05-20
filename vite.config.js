@@ -1,23 +1,43 @@
-import { fileURLToPath, URL } from 'node:url'
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig, loadEnv } from "vite"
+import vue from "@vitejs/plugin-vue"
+import basicSsl from '@vitejs/plugin-basic-ssl'
+import { fileURLToPath, URL } from 'url'
+
+/*global process*/
 
 export default defineConfig(() => {
+	const env = loadEnv(null, process.cwd());
+
 	return {
-		plugins: [ vue() ],
+		plugins: [
+            		vue(), 
+            		basicSsl(),
+        	],
 		build: {
 			emptyOutDir: false,
-			copyPublicDir: false,
+            		copyPublicDir: false,
 			outDir: 'public',
-			assetsDir: 'dist',
+			assetsDir: env.VITE_ASSETS_DIR,
 			manifest: true,
 			rollupOptions: {
-				input: `./src/main.js`,
+				input: `./${env.VITE_RESOURCES_DIR}/${env.VITE_ENTRY_FILE}`,
 			},
-		}
+		},
+		server: {
+			origin: env.VITE_ORIGIN,
+			port: env.VITE_PORT,
+			strictPort: true,
+            		https: true,
+			cors: true,
+            		hmr: {
+                		host: env.VITE_HOST,
+                		port: env.VITE_PORT,
+                		protocol: 'wss'
+            		}
+		},
 		resolve: {
 			alias: {
-				'@': fileURLToPath(new URL(`./src`, import.meta.url))
+				'@': fileURLToPath(new URL(`./${env.VITE_RESOURCES_DIR}`, import.meta.url))
 			}
 		}
 	};
